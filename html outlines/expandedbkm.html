@@ -1,0 +1,14 @@
+<section class='bookmark-list'>
+    <!--Bookmark list-->
+    <div class="expanded-bkm" data-item-id="${bookmark.id}">
+     <section class="bookmark-top-row">
+     <a class="expanded-title" href="${bookmark.url}" target="_blank"> <strong> ${bookmark.title} </strong> </a> 
+     <a class="expanded-rating" href="${bookmark.url}" target="_blank"> ${rating} </a> 
+     <button class="collapse-btn"></i> Collapse </button>
+   </section>
+     <section class="bookmark-bottom-row"> 
+       <p id="description"> <strong>Notes:</strong> ${bookmark.desc} </p>
+       <button class="delete-btn"></i> Delete </button>
+     </section>
+   </div>
+</section>
