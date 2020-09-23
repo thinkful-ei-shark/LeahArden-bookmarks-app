@@ -1,4 +1,4 @@
-import "./styles.css";
+
 
 //create const for URL
 const BASE_URL = 'https://thinkful-list-api.herokuapp.com/leaharden/'
@@ -74,6 +74,7 @@ const editBookmark = function (id, updateBookmark){
 //create function to delete bookmark USES STRINGIFY
 //this will need the header and method inside METHOD IS DELETE
 const deleteBookmark = function (id) {
+    console.log('deleteBookmark ran')
     return apiFetch(`${BASE_URL}/bookmarks/${id}`, {
         method: 'DELETE'
     });
