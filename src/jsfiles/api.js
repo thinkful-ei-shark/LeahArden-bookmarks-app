@@ -1,7 +1,7 @@
 
 
 //create const for URL
-const BASE_URL = 'https://thinkful-list-api.herokuapp.com/leaharden'
+const BASE_URL = 'https://thinkful-list-api.herokuapp.com/leah'
 
 //create API function to fetch API 
 //add errors after everything works?

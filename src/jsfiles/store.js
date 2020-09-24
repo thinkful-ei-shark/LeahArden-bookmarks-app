@@ -7,6 +7,7 @@ let error = null;
 let filter = false;
 let adding = false;
 let filteredBookmarks = [];
+let expanded;
 
 //create function that will find the current item by id
 const findById = function (id) {
@@ -28,7 +29,7 @@ const deleteBookmark = function (id) {
     });
 };
 
-//create function that will update bookmark
+//create function that will update bookmark for extended goal
 const updateBookmark = function (id, newBookmark){
     const currentBookmark = this.findById(id);
     Object.assign(currentBookmark, newBookmark);
@@ -48,9 +49,13 @@ const filterBookmarks = function (rating){
 //create filter to get the vaule from the rating filter
 const ratingfilter = function (value) {
     this.ratingfilter = value;
-} 
+} ;
 
-//create function that will set the error message
+const expandedBookmarkId = function (id){
+    this.expanded = id;
+    console.log('now has expanded id')
+};
+//create function that will set the error message?
 
 
 //exports below
@@ -65,4 +70,6 @@ export default{
     deleteBookmark,
     updateBookmark,
     filterBookmarks,
+    expandedBookmarkId,
+    ratingfilter,
 }

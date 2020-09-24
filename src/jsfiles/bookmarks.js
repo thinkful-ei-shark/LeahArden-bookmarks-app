@@ -29,23 +29,11 @@ const intialHtml = function (bookmarks){
 
 //create a function that shows collapsed  view of list
 const collapsedHtml = function (bookmark) {
-    let collapsedView = /*`       
-    <div id='accordion' class="collapsed-bkm" data-item-id="${bookmark.id}">
-        <section class="">
-            <a class="collapsed-title" >${bookmark.title}</a> 
-            <a class="collapsed-rating"> ${bookmark.rating} </a> 
-            <button  type='button' class="expand-btn">Expand</button>
-        </section>
-  </div>`*/
+
+    let collapsedView = 
   `     <div id="accordion" data-item-id="${bookmark.id}">
                 <div id='accordion'>
-                    <h3><a href=''>${bookmark.title} ${bookmark.rating} <button id='expand-collapse'>...</button></a></h3>
-                    
-                    <div>
-                    <p>${bookmark.url}</p>  
-                    <p<${bookmark.desc}</p>
-                    <button>Delete</button>
-                    </div>
+                    <h3>${bookmark.title} ${bookmark.rating} <button id='expand-collapse'>...</button></a></h3>
                     
                 </div>
         </div>`
@@ -78,27 +66,32 @@ const addingBookmarkHtml = function () {
             </div>
             <div class='save-delete'>
                 <button type='submit' id='bkm-save'>Save</button>
+            </div>
+            </form>
+            <form>
+            <div>
                 <button id='js-cancel'>Cancel</button>
-            </div<
+            </div>
         </form>`
         return addingBookmark;
 };
 
 //create a function that will generate html for editing bookmark page
-const editingBookmarkHtml = function (bookmark, rating) {
-    let editingBookmark = `
-    <div class="expanded-bkm" data-item-id="${bookmark.id}">
-     <section class="bookmark-top-row">
-     <a class="expanded-title" href="${bookmark.url}" target="_blank"> <strong> ${bookmark.title} </strong> </a> 
-     <a class="expanded-rating" href="${bookmark.url}" target="_blank"> ${rating} </a> 
-     <button class="collapse-btn"></i> Collapse </button>
-   </section>
-     <section class="bookmark-bottom-row"> 
-       <p id="description"> <strong>Notes:</strong> ${bookmark.desc} </p>
-       <button class="delete-btn"></i> Delete </button>
-     </section>
-   </div>`
-   return editingBookmark;
+const expandedBookmarkHtml = function (bookmark, rating) {
+    let expandedBookmark = `
+        <div id="accordion" data-item-id="${bookmark.id}">
+    <div id='accordion'>
+        <h3>${bookmark.title} ${bookmark.rating} <button id='expand-collapse'>...</button></a></h3>
+        
+        <div>
+        <p>${bookmark.url}</p>  
+        <p<${bookmark.desc}</p>
+        <button>Delete</button>
+        </div>
+        
+    </div>
+</div>`
+   return expandedBookmarkHtml;
 };
 
 
@@ -142,7 +135,7 @@ const handleAddNewButton = function (){
 //adds new bookmark to the dom
 //calls render function to go to bookmark list page
 const handleNewBookSubmit = function (bookmark){
-    $('main').on('submit', event => {
+    $('main').on('submit', '#bkm-save', event => {
         event.preventDefault();
         console.log('handleNewBookSubmit ran');
         let newBookmarkTitle = $('#new-bkm-title').val();
@@ -167,19 +160,31 @@ const handleNewBookSubmit = function (bookmark){
     });
 };
 
-//create function that will expand and collapse ACCORDION
-const accordion = function (){
-    $('#accordion').accordion();
-}
+//create function that cancels and going back to inital page
+
+const handleCancelClick = function (){
+    $('main').on('click', '#js-cancel', event => {
+        console.log('cancel button ran')
+        event.preventDefault()
+        store.adding = false;
+        render();
+    })
+};
 
 //create function to toggle expand button
-const handleExpand = function (){
-    $('main').on('click', '#expand-collapse', event =>{
-        console.log('expand ran');
-        event.preventDefault;
-        $('#accordion').accordion();
-    } )
-}
+//prevent Default
+//find id of item that was clicked
+//add the description box html. append???
+const handleExpandClicked = function (){
+    $('main').on('click','#expand-collapse', event => {
+        console.log('handle expand ran')
+        event.preventDefault();
+        let id = store.findById(event.Target);
+        if(id = store.Id){
+            $('main').append(expandedBookmarkHtml);
+        }
+    })
+};
 
 //create function that listens to dropdown .onChange()?
 //when specfic filter is clicked
@@ -202,5 +207,8 @@ const handleExpand = function (){
 export default{
     handleAddNewButton,
     handleNewBookSubmit,
+    handleExpandClicked,
+    handleCancelClick,
     render,
+
 }

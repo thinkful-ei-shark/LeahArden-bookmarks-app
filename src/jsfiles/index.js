@@ -25,6 +25,8 @@ api.getBookmarks()
     bookmarks.render();
     bookmarks.handleAddNewButton();
     bookmarks.handleNewBookSubmit();
+    bookmarks.handleExpandClicked();
+    bookmarks.handleCancelClick();
 
 }
 
