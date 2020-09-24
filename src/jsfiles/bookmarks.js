@@ -1,6 +1,7 @@
 //imports up top
 import $ from 'jquery';
 import store from './store';
+import api from './api';
 
 const intialHtml = function (bookmarks){
     let intialLoad = `
@@ -28,14 +29,26 @@ const intialHtml = function (bookmarks){
 
 //create a function that shows collapsed  view of list
 const collapsedHtml = function (bookmark) {
-    let collapsedView = `       
-    <div class="collapsed-bkm" data-item-id="${bookmark.id}">
+    let collapsedView = /*`       
+    <div id='accordion' class="collapsed-bkm" data-item-id="${bookmark.id}">
         <section class="">
-            <a class="collapsed-title" href="${bookmark.url}" target="_blank">${bookmark.title}</a> 
-            <a class="collapsed-rating" href="${bookmark.url}" target="_blank"> ${bookmark.rating} </a> 
+            <a class="collapsed-title" >${bookmark.title}</a> 
+            <a class="collapsed-rating"> ${bookmark.rating} </a> 
             <button  type='button' class="expand-btn">Expand</button>
         </section>
-  </div>`
+  </div>`*/
+  `     <div id="accordion" data-item-id="${bookmark.id}">
+                <div id='accordion'>
+                    <h3><a href=''>${bookmark.title} ${bookmark.rating} <button id='expand-collapse'>...</button></a></h3>
+                    
+                    <div>
+                    <p>${bookmark.url}</p>  
+                    <p<${bookmark.desc}</p>
+                    <button>Delete</button>
+                    </div>
+                    
+                </div>
+        </div>`
   return collapsedView;
 };
 
@@ -43,20 +56,25 @@ const collapsedHtml = function (bookmark) {
 const addingBookmarkHtml = function () {
     let addingBookmark = `
     <form id='js-new-bkm'>
+            <div class=''>
+                <label aria-label='new-bkm-rating' for='new-bkm-rating'>Add a Rating Between 1-5</label>
+                <input type="number" class="rating" size="3" min="1" max="5" name="url" placeholder="3" id="new-bkm-rating" required>
+
+            </div>
 
             <div class='new-bkm'> 
                 <label id="new-bookmark-title">Bookmark Name:</label>
-                <input type="text" name="title" placeholder="New bookmark" id="new-bookmark-title" required>
+                <input type="text" name="title" placeholder="New bookmark" id="new-bkm-title">
             </div> 
 
             <div class='new-bkm'>
                 <label id="new-url">Add URL:</label>
-                <input type="text" name="url" placeholder="url" id="new-url">
+                <input type="text" name="url" placeholder="url" id="new-bkm-url" required>
             </div>
 
             <div class='new-bkm'>
                 <label id="descripton">Description:</label>
-                <input type="text" name="Description" placeholder="Description" id="description">
+                <input type="text" name="Description" placeholder="Description" id="new-bkm-desc" required>
             </div>
             <div class='save-delete'>
                 <button type='submit' id='bkm-save'>Save</button>
@@ -84,6 +102,7 @@ const editingBookmarkHtml = function (bookmark, rating) {
 };
 
 
+
 const bookmarksList = function (bookmarks){
     let allBookmarks = ``;
     for( let i = 0; i < bookmarks.length; i++ ){
@@ -92,9 +111,9 @@ const bookmarksList = function (bookmarks){
     return allBookmarks;
 }
 
-
 //create render function that renders each page
 const render = function () {
+    console.log(store);
     //$('main').html(intialHtml(store.bookmarkList));
     if(!store.adding){
         $('main').html(intialHtml(store.bookmarkList));
@@ -122,15 +141,45 @@ const handleAddNewButton = function (){
 //create function that listens to the submit button on the addingBookmark page
 //adds new bookmark to the dom
 //calls render function to go to bookmark list page
-const handleNewBookSubmit = function (){
-    $('main').on('submit', '#js-new-bkm', event => {
+const handleNewBookSubmit = function (bookmark){
+    $('main').on('submit', event => {
         event.preventDefault();
         console.log('handleNewBookSubmit ran');
-        store.adding = false;
-        render();
-    }) 
+        let newBookmarkTitle = $('#new-bkm-title').val();
+        let newBookmarkUrl = $('#new-bkm-url').val();
+        let newBookmarkDesc = $('#new-bkm-desc').val();
+        let newBookmarkRating = $('#new-bkm-rating').val();
+    
+        
+        let newBookmark = {
+            title: newBookmarkTitle,
+            url: newBookmarkUrl,
+            desc: newBookmarkDesc,
+            rating: newBookmarkRating
+        };
+
+        api.createBookmark(newBookmark)
+        .then((newBookmark) =>{
+            store.addNewBookmark(newBookmark);
+            store.adding = false;
+            render(); 
+        });
+    });
 };
 
+//create function that will expand and collapse ACCORDION
+const accordion = function (){
+    $('#accordion').accordion();
+}
+
+//create function to toggle expand button
+const handleExpand = function (){
+    $('main').on('click', '#expand-collapse', event =>{
+        console.log('expand ran');
+        event.preventDefault;
+        $('#accordion').accordion();
+    } )
+}
 
 //create function that listens to dropdown .onChange()?
 //when specfic filter is clicked

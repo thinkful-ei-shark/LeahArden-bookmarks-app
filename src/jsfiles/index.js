@@ -6,6 +6,7 @@ import 'normalize.css';
 import './../styles.css';
 import api from './api.js';
 import bookmarks from './bookmarks';
+import store from './store';
 
 
 //Should contain the main function which renders the page
@@ -14,6 +15,13 @@ import bookmarks from './bookmarks';
 
 
 const main = function (){
+api.getBookmarks()
+.then((bookmarkData) =>{
+    console.log(bookmarkData);
+    bookmarkData.forEach((bookmark) => store.addNewBookmark(bookmark));
+    bookmarks.render();
+})
+
     bookmarks.render();
     bookmarks.handleAddNewButton();
     bookmarks.handleNewBookSubmit();
