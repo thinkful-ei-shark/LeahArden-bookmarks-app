@@ -38,7 +38,7 @@ p{
 }
 
 .new-bkm{
-    font-size: 20px;
+    font-size: 18px;
     margin: 10px;
     text-align: center;
 }
@@ -52,6 +52,9 @@ p{
     margin-left: 20px;
 }
 
+.save-delete{
+    text-align: center;
+}
 
 .collapsed-rating, .expanded-rating{
       margin-left: 10px;

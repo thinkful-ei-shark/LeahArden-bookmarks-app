@@ -25,13 +25,6 @@ const intialHtml = function (bookmarks){
     return intialLoad + bookmarksList(bookmarks);
 };
 
-const bookmarksList = function (bookmarks){
-    let allBookmarks = ``;
-    for( let i = 0; i < bookmarks.length; i++ ){
-        allBookmarks += collapsedHtml(bookmarks[i]);
-    }
-    return allBookmarks;
-}
 
 //create a function that shows collapsed  view of list
 const collapsedHtml = function (bookmark) {
@@ -49,24 +42,8 @@ const collapsedHtml = function (bookmark) {
 //create a function that will generate html for adding bookmark page
 const addingBookmarkHtml = function () {
     let addingBookmark = `
-    <section class='filter-new-btns'>
-    <div class='buttons'>
-        <form id='add-new'>
-            <button id='js-add-new' class="button">Add new Bookmark!</button>
-
-            <label id="js-ratings">Filter</label>
-                <select name="ratings" id="rate">
-                    <option value="all">All</option>
-                    <option value="1">1 star</option>
-                    <option value="2">2 stars</option>
-                    <option value="3">3 stars</option>
-                    <option value="4">4 stars</option>
-                    <option value="5">5 stars</option>
-                </select>
-        </form>
-    </div>
-</section>
     <form id='js-new-bkm'>
+
             <div class='new-bkm'> 
                 <label id="new-bookmark-title">Bookmark Name:</label>
                 <input type="text" name="title" placeholder="New bookmark" id="new-bookmark-title" required>
@@ -81,9 +58,10 @@ const addingBookmarkHtml = function () {
                 <label id="descripton">Description:</label>
                 <input type="text" name="Description" placeholder="Description" id="description">
             </div>
-            <div>
-                <button type='submit' id="new-bkm-save">Save </button>
-            </div> 
+            <div class='save-delete'>
+                <button type='submit' id='bkm-save'>Save</button>
+                <button id='js-cancel'>Cancel</button>
+            </div<
         </form>`
         return addingBookmark;
 };
@@ -105,6 +83,16 @@ const editingBookmarkHtml = function (bookmark, rating) {
    return editingBookmark;
 };
 
+
+const bookmarksList = function (bookmarks){
+    let allBookmarks = ``;
+    for( let i = 0; i < bookmarks.length; i++ ){
+        allBookmarks += collapsedHtml(bookmarks[i]);
+    }
+    return allBookmarks;
+}
+
+
 //create render function that renders each page
 const render = function () {
     //$('main').html(intialHtml(store.bookmarkList));
@@ -122,7 +110,7 @@ const render = function () {
 //make store.adding = true
 //calls render function
 const handleAddNewButton = function (){
-    $('#add-new').on('click', '#js-add-new', event => {
+    $('main').on('click', '#js-add-new', event => {
         event.preventDefault();
         console.log('handleAddNewSubmit ran');
         store.adding = true;
@@ -135,7 +123,7 @@ const handleAddNewButton = function (){
 //adds new bookmark to the dom
 //calls render function to go to bookmark list page
 const handleNewBookSubmit = function (){
-    $('#js-new-bkm').on('submit', '#new-bkm-save', event => {
+    $('main').on('submit', '#js-new-bkm', event => {
         event.preventDefault();
         console.log('handleNewBookSubmit ran');
         store.adding = false;
