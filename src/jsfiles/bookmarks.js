@@ -1,4 +1,3 @@
-//imports up top
 import $ from 'jquery';
 import store from './store';
 import api from './api';
@@ -78,11 +77,9 @@ const addingBookmarkHtml = function () {
             </div>
             <div class='save-delete'>
                 <button type='submit' id='bkm-save'>Save</button>
-            </div>
-            </form>
-            <form>  
                 <button id='js-cancel'>Cancel</button>
-            </form>`
+            </div<
+        </form>`
         return addingBookmark;
 };
 
@@ -144,7 +141,7 @@ const handleAddNewButton = function (){
 //adds new bookmark to the dom
 //calls render function to go to bookmark list page
 const handleNewBookSubmit = function (bookmark){
-    $('main').on('submit', '#bkm-save', event => {
+    $('main').on('submit', event => {
         event.preventDefault();
         console.log('handleNewBookSubmit ran');
         let newBookmarkTitle = $('#new-bkm-title').val();
@@ -169,15 +166,9 @@ const handleNewBookSubmit = function (bookmark){
     });
 };
 
-
-//create function for cancel button
-const handleCancelClick = function (){
-    $('main').on('click', '#js-cancel', event => {
-        console.log('cancel button ran');
-        event.preventDefault;
-        store.adding = false;
-        render();
-    })
+//create function that will expand and collapse ACCORDION
+const accordion = function (){
+    $('#accordion').accordion();
 }
 
 //create function to toggle expand button
@@ -185,6 +176,7 @@ const handleExpand = function (){
     $('main').on('click', '#expand-collapse', event =>{
         console.log('expand ran');
         event.preventDefault;
+        $('#accordion').accordion();
     } )
 }
 
@@ -209,6 +201,5 @@ const handleExpand = function (){
 export default{
     handleAddNewButton,
     handleNewBookSubmit,
-    handleCancelClick,
     render,
 }
