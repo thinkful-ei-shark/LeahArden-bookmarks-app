@@ -3,7 +3,7 @@ import store from './store';
 import api from './api';
 import { bind } from 'file-loader';
 
-const intialHtml = function (bookmarks, filterValue){
+const intialHtml = function (bookmarks, selectedRating){
     let intialLoad = `
     <section class='filter-new-btns'>
     <div class='buttons'>
@@ -12,19 +12,31 @@ const intialHtml = function (bookmarks, filterValue){
 
             <label id="js-ratings">Filter</label>
                 <select class ='ratings' name="ratings" id="rate">
-                    <option value="all">All</option>
-                    <option value="1">1 star</option>
-                    <option value="2">2 stars</option>
-                    <option value="3">3 stars</option>
-                    <option value="4">4 stars</option>
-                    <option value="5">5 stars</option>
+                ${filterHtmlDropdownList(selectedRating)}
                 </select>
         </form>
     </div>
 </section>
 `
-    return intialLoad + bookmarksList(bookmarks);
+    return intialLoad + bookmarksList(bookmarks, selectedRating);
 };
+
+
+
+const filterHtmlDropdownList = function (selectedRating){
+    let options = ''
+    for(let i = 1; i <= 5; i++){
+        if(selectedRating === i){
+            options += `<option selected="selected" value="${i}">${i} star</option>`
+        }else{
+            options += `<option value="${i}">${i} star</option>`
+        }
+    };
+    return options;
+};
+
+
+
 
 
 //create a function that shows collapsed  view of list
@@ -32,17 +44,17 @@ const collapsedHtml = function (bookmark) {
     if (!bookmark.expand) 
     {return `<div class="js-bkm-element" data-item-id="${bookmark.id}">
                       <div>
-                          <h3><a href=''>${bookmark.title} ${bookmark.rating} <button id='expand'>expand</button></a></h3>
+                          <h3> ${bookmark.title} ${bookmark.rating} <button id='expand'>expand</button></a></h3>
                       </div>
               </div>`
 } else {
     return `<div class="js-bkm-element" data-item-id="${bookmark.id}">
                       <div>
-                          <h3><a href=''>${bookmark.title} ${bookmark.rating} <button id='collapse'>collapse</button></a></h3>
+                          <h3>${bookmark.title} ${bookmark.rating}<button id='collapse'>collapse</button></a></h3>
                                           
                           <div>
-                          <p>${bookmark.url}</p>  
-                          <p<${bookmark.desc}</p>
+                          <p>${bookmark.url}</p>
+                           <p>${bookmark.desc}</p>  
                           <button id='js-delete'>Delete</button>
                           </div>
                           
@@ -74,7 +86,7 @@ const addingBookmarkHtml = function () {
 
             <div class='new-bkm'>
                 <label id="descripton">Description:</label>
-                <input type="text" name="Description" placeholder="Description" id="new-bkm-desc" required>
+                <input type="text" name="desc" placeholder="Description" id="new-bkm-desc" required>
             </div>
             <div class='save-delete'>
                 <button type='submit' id='bkm-save'>Save</button>
@@ -108,10 +120,12 @@ const editingBookmarkHtml = function (bookmark, rating) {
 */
 
 
-const bookmarksList = function (bookmarks){
+const bookmarksList = function (bookmarks, selectedRating){
     let allBookmarks = ``;
     for( let i = 0; i < bookmarks.length; i++ ){
-        allBookmarks += collapsedHtml(bookmarks[i]);
+        if (bookmarks[i].rating >= selectedRating) {
+            allBookmarks += collapsedHtml(bookmarks[i]);
+        }
     }
     return allBookmarks;
 }
@@ -119,18 +133,19 @@ const bookmarksList = function (bookmarks){
 
 //create render function that renders each page
 const render = function (){
-    $('main').html(intialHtml(store.bookmarkList));
+    console.log(store.bookmarkList);
+    $('main').html(intialHtml(store.bookmarkList, 1));
 
      if (store.adding){
+
          $('main').html(addingBookmarkHtml());
 
+     }  else if (store.filter) {
+         $('main').html(intialHtml(store.bookmarkList, store.selectedRating));
+        }
+         //let filteredBookmarks = [...store.filteredBookmarksArray];
+         //console.log(filteredBookmarks);
          
-     } else if (store.filter){
-         let filteredBookmarks = [...store.filteredBookmarks];
-         console.log(filteredBookmarks);
-         $('main').html(intialHtml(filteredBookmarks));
-         store.filteredBookmarks= [];
-     }
 }
 
 
@@ -142,6 +157,7 @@ const handleAddNewButton = function (){
     $('main').on('click', '#js-add-new', event => {
         event.preventDefault();
         console.log('handleAddNewSubmit ran');
+        store.filter = false;
         store.adding = true;
         render();
     })
@@ -217,7 +233,7 @@ const handleExpandClick = function (){
     $('main').on('click','#expand', event => {
         event.preventDefault();
         const id = getBookmarkId(event.currentTarget);
-        console.log(id);
+        console.log('expand click ran');
         store.expandedBookmarkToggle(id);
         render();
     })
@@ -229,7 +245,7 @@ const handleCollapseClick = function (){
         event.preventDefault();
         const id = getBookmarkId(event.currentTarget);
         //const bookmark = store.findById(id)
-        console.log(id);
+        console.log('collapse click ran');
         store.expandedBookmarkToggle(id);
         //bookmark.expand = false;
         render();
@@ -241,7 +257,8 @@ const handleFilterChange = function (){
     $('main').on('change','#rate', event => {
         const selectedRating = parseInt($('#rate').val());
         console.log('rating', selectedRating);
-        store.filterBookmarks(selectedRating);
+        store.filteredBookmarksArray(selectedRating)
+        store.filter = true;
         render();
     })
 }

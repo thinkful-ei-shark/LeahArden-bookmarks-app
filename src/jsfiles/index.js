@@ -10,9 +10,6 @@ import store from './store';
 
 //Should contain the main function which renders the page
 //will call other functions to render
-
-
-
 const main = function (){
 api.getBookmarks()
 .then((bookmarkData) =>{

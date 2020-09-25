@@ -2,11 +2,11 @@
 
 
 //create bookmarkList as empty array
-const bookmarkList = [];
+let bookmarkList = [];
 let error = null;
 let filter = false;
 let adding = false;
-let filteredBookmarks = [];
+let selectedRating = 0;
 
 //create function that will find the current item by id
 const findById = function (id) {
@@ -42,16 +42,13 @@ const updateBookmark = function (id, newBookmark){
     Object.assign(currentBookmark, newBookmark);
 };
 
-//create function that will filter bookmarks according to chosen rating
-//if filter is >= rating chosen, push to the new array
-const filterBookmarks = function (filterNum){
-    this.filter = true;
-    this.bookmarkList.forEach(bookmark => {
-        if(bookmark.rating >= filterNum) {
-            this.filteredBookmarks.push(bookmark)
-        } 
-    })
+
+const filteredBookmarksArray = function (filterNum){
+     //this.bookmarkList = this.bookmarkList.filter( bookmark => bookmark.rating >= filterNum);
+     //console.log(bookmarkList);
+     this.selectedRating = filterNum;
 };
+
 
 const expandedBookmarkToggle = function (id) {
     //find id to expand
@@ -64,28 +61,17 @@ const expandedBookmarkToggle = function (id) {
     }
   }
 
-
-/*
-const expandedBookmarkToggle = function (id) {
-
-    this.expanded = !this.expanded;
-}
-*/
-
-//create function that will set the error message
-
-
 //exports below
 export default{
     bookmarkList,
     error,
     filter,
     adding,
-    filteredBookmarks,
     findById,
     addNewBookmark,
     deleteBookmark,
     updateBookmark,
-    filterBookmarks,
+    filteredBookmarksArray,
     expandedBookmarkToggle,
+    setError,
 }
