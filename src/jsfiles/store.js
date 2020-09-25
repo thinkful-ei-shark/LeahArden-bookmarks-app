@@ -61,6 +61,10 @@ const expandedBookmarkToggle = function (id) {
     }
   }
 
+  const setError = function (error) {
+    this.error = error;
+  };
+
 //exports below
 export default{
     bookmarkList,
@@ -74,4 +78,5 @@ export default{
     filteredBookmarksArray,
     expandedBookmarkToggle,
     setError,
+    selectedRating,
 }

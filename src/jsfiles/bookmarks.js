@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import store from './store';
 import api from './api';
-import { bind } from 'file-loader';
 
 const intialHtml = function (bookmarks, selectedRating){
     let intialLoad = `
@@ -21,6 +20,33 @@ const intialHtml = function (bookmarks, selectedRating){
     return intialLoad + bookmarksList(bookmarks, selectedRating);
 };
 
+
+const generateError = function (message) {
+    return `
+        <section class="error-content">
+        <div>
+          <button id="cancel-error">X</button>
+          <p>All entries are required! Don't forget to make sure your URL has https:// in front!</p>
+          </div>
+        </section>
+      `;
+  };
+  
+  const renderError = function () {
+    if (store.error) {
+      const el = generateError(store.error);
+      $('.error-container').html(el);
+    } else {
+      $('.error-container').empty();
+    }
+  };
+  
+  const handleCloseError = function () {
+    $('main').on('click', '#cancel-error', () => {
+      store.setError(null);
+      renderError();
+    });
+  };
 
 
 const filterHtmlDropdownList = function (selectedRating){
@@ -67,8 +93,9 @@ const collapsedHtml = function (bookmark) {
 //create a function that will generate html for adding bookmark page
 const addingBookmarkHtml = function () {
     let addingBookmark = `
+    <div class="error-container"></div>
     <form id='js-new-bkm'>
-            <div class=''>
+            <div class='new-bkm'>
                 <label aria-label='new-bkm-rating' for='new-bkm-rating'>Add a Rating Between 1-5</label>
                 <input type="number" class="rating" size="3" min="1" max="5" name="url" placeholder="3" id="new-bkm-rating" required>
 
@@ -133,6 +160,8 @@ const bookmarksList = function (bookmarks, selectedRating){
 
 //create render function that renders each page
 const render = function (){
+    renderError();
+
     console.log(store.bookmarkList);
     $('main').html(intialHtml(store.bookmarkList, 1));
 
@@ -189,7 +218,11 @@ const handleNewBookSubmit = function (bookmark){
             store.addNewBookmark(newBookmark);
             store.adding = false;
             render(); 
-        });
+        })
+        .catch((error) => {
+            store.setError(error.message);
+            renderError();
+        })
     });
 };
 
@@ -220,6 +253,11 @@ const deleteButtonClick = function (){
              store.deleteBookmark(id);
              console.log(id);
              render();
+         })
+         .catch((error) => {
+             console.log(error);
+             store.setError(error.message);
+             renderError();
          });
     });
 };
@@ -272,6 +310,7 @@ const bindEventListeners = function (){
     handleExpandClick();
     handleCollapseClick();
     handleFilterChange();
+    handleCloseError();
 }
 
 
