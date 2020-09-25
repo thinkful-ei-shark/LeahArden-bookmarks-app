@@ -77,8 +77,12 @@ const addingBookmarkHtml = function () {
             </div>
             <div class='save-delete'>
                 <button type='submit' id='bkm-save'>Save</button>
+            </div>
+            </form>
+    <form>
+            <div>    
                 <button id='js-cancel'>Cancel</button>
-            </div<
+            </div>
         </form>`
         return addingBookmark;
 };
@@ -166,19 +170,19 @@ const handleNewBookSubmit = function (bookmark){
     });
 };
 
-//create function that will expand and collapse ACCORDION
-const accordion = function (){
-    $('#accordion').accordion();
+//create function for cancel button
+const cancelButtonClick = function (){
+    $('main').on('click','#js-cancel' , event =>{
+        event.preventDefault();
+        console.log('cancel click ran');
+        store.adding = false;
+        render();
+    })
 }
 
+
 //create function to toggle expand button
-const handleExpand = function (){
-    $('main').on('click', '#expand-collapse', event =>{
-        console.log('expand ran');
-        event.preventDefault;
-        $('#accordion').accordion();
-    } )
-}
+
 
 //create function that listens to dropdown .onChange()?
 //when specfic filter is clicked
@@ -201,5 +205,6 @@ const handleExpand = function (){
 export default{
     handleAddNewButton,
     handleNewBookSubmit,
+    cancelButtonClick,
     render,
 }

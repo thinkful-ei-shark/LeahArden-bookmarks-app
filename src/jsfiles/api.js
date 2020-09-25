@@ -1,7 +1,7 @@
 
 
 //create const for URL
-const BASE_URL = 'https://thinkful-list-api.herokuapp.com/leah'
+const BASE_URL = 'https://thinkful-list-api.herokuapp.com/leaha'
 
 //create API function to fetch API 
 //add errors after everything works?
@@ -86,4 +86,5 @@ export default{
     createBookmark,
     editBookmark,
     deleteBookmark,
+    
 };
