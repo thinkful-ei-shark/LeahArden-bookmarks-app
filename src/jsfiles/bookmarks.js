@@ -1,8 +1,9 @@
 import $ from 'jquery';
 import store from './store';
 import api from './api';
+import { bind } from 'file-loader';
 
-const intialHtml = function (bookmarks){
+const intialHtml = function (bookmarks, filterValue){
     let intialLoad = `
     <section class='filter-new-btns'>
     <div class='buttons'>
@@ -10,7 +11,7 @@ const intialHtml = function (bookmarks){
             <button id='js-add-new' class="button">Add new Bookmark!</button>
 
             <label id="js-ratings">Filter</label>
-                <select name="ratings" id="rate">
+                <select class ='ratings' name="ratings" id="rate">
                     <option value="all">All</option>
                     <option value="1">1 star</option>
                     <option value="2">2 stars</option>
@@ -28,28 +29,28 @@ const intialHtml = function (bookmarks){
 
 //create a function that shows collapsed  view of list
 const collapsedHtml = function (bookmark) {
-    let collapsedView = /*`       
-    <div id='accordion' class="collapsed-bkm" data-item-id="${bookmark.id}">
-        <section class="">
-            <a class="collapsed-title" >${bookmark.title}</a> 
-            <a class="collapsed-rating"> ${bookmark.rating} </a> 
-            <button  type='button' class="expand-btn">Expand</button>
-        </section>
-  </div>`*/
-  `     <div id="accordion" data-item-id="${bookmark.id}">
-                <div id='accordion'>
-                    <h3><a href=''>${bookmark.title} ${bookmark.rating} <button id='expand-collapse'>...</button></a></h3>
-                    
-                    <div>
-                    <p>${bookmark.url}</p>  
-                    <p<${bookmark.desc}</p>
-                    <button>Delete</button>
-                    </div>
-                    
-                </div>
-        </div>`
-  return collapsedView;
-};
+    if (!bookmark.expanded) 
+    {return `<div class="js-bkm-element" data-item-id="${bookmark.id}">
+                      <div>
+                          <h3><a href=''>${bookmark.title} ${bookmark.rating} <button id='expand'>expand</button></a></h3>
+                      </div>
+              </div>`
+} else {
+    return `<div class="js-bkm-element" data-item-id="${bookmark.id}">
+                      <div>
+                          <h3><a href=''>${bookmark.title} ${bookmark.rating} <button id='collapse'>collapse</button></a></h3>
+                                          
+                          <div>
+                          <p>${bookmark.url}</p>  
+                          <p<${bookmark.desc}</p>
+                          <button id='js-delete'>Delete</button>
+                          </div>
+                          
+                      </div>
+              </div>`
+    };
+};                          
+
 
 //create a function that will generate html for adding bookmark page
 const addingBookmarkHtml = function () {
@@ -88,6 +89,7 @@ const addingBookmarkHtml = function () {
 };
 
 //create a function that will generate html for editing bookmark page
+/*
 const editingBookmarkHtml = function (bookmark, rating) {
     let editingBookmark = `
     <div class="expanded-bkm" data-item-id="${bookmark.id}">
@@ -97,13 +99,13 @@ const editingBookmarkHtml = function (bookmark, rating) {
      <button class="collapse-btn"></i> Collapse </button>
    </section>
      <section class="bookmark-bottom-row"> 
-       <p id="description"> <strong>Notes:</strong> ${bookmark.desc} </p>
-       <button class="delete-btn"></i> Delete </button>
+       <p id="description">Notes: ${bookmark.desc} </p>
+       <button class="delete-btn"> Delete </button>
      </section>
    </div>`
    return editingBookmark;
 };
-
+*/
 
 
 const bookmarksList = function (bookmarks){
@@ -114,17 +116,22 @@ const bookmarksList = function (bookmarks){
     return allBookmarks;
 }
 
-//create render function that renders each page
-const render = function () {
-    console.log(store);
-    //$('main').html(intialHtml(store.bookmarkList));
-    if(!store.adding){
-        $('main').html(intialHtml(store.bookmarkList));
-    } else {
-        $('main').html(addingBookmarkHtml());
-    }
 
-};
+//create render function that renders each page
+const render = function (){
+    $('main').html(intialHtml(store.bookmarkList));
+
+     if (store.adding){
+         $('main').html(addingBookmarkHtml());
+
+         
+     } else if (store.filter){
+         let filteredBookmarks = [...store.filteredBookmarks];
+         console.log(filteredBookmarks);
+         $('main').html(intialHtml(filteredBookmarks));
+         store.filteredBookmarks= [];
+     }
+}
 
 
 //create function that listens to add new bookmark click
@@ -180,31 +187,78 @@ const cancelButtonClick = function (){
     })
 }
 
+const getBookmarkId = function (bookmark){
+    return $(bookmark).closest('.js-bkm-element').data('item-id');
+}
 
-//create function to toggle expand button
+//create function for the delete button
+const deleteButtonClick = function (){
+    $('main').on('click', '#js-delete', event =>{
+        event.preventDefault();
+        console.log('delete button ran');
+        const id = getBookmarkId(event.currentTarget);
+        console.log(id);
+
+        api.deleteBookmark(id)
+         .then(()=> {
+             store.deleteBookmark(id);
+             console.log(id);
+             render();
+         });
+    });
+};
 
 
-//create function that listens to dropdown .onChange()?
-//when specfic filter is clicked
-//create new array of filtered bookmarks (call function filterBookmarks from store.js)
-/*const handleFilterDropdown = function ()[
-    $().on('change','' , event => {
-
+//function to handle when expand is clicked
+//use getBookmarkId function to get id of item
+//expanded = true
+//render()
+const handleExpandClick = function (){
+    $('main').on('click','#expand', event => {
+        event.preventDefault();
+        const id = getBookmarkId(event.currentTarget);
+        console.log(id);
+        store.expandedBookmark(id);
+        render();
     })
-]
-*/
+}
+
+//create function that handles collapse click
+const handleCollapseClick = function (){
+    $('main').on('click','#collapse', event => {
+        event.preventDefault();
+        const id = getBookmarkId(event.currentTarget);
+        //const bookmark = store.findById(id)
+        console.log(id);
+        store.expanded = false;
+        render();
+    })
+}
+
+//create function to handle filtering bookmarks on change?
+const handleFilterChange = function (){
+    $('main').on('change','#rate', event => {
+        const selectedRating = parseInt($('#rate').val());
+        console.log('rating', selectedRating);
+        store.filterBookmarks(selectedRating);
+        render();
+    })
+}
 
 
-   //create function that
-
-
-
+const bindEventListeners = function (){
+    handleAddNewButton();
+    handleNewBookSubmit();
+    cancelButtonClick();
+    deleteButtonClick();
+    handleExpandClick();
+    handleCollapseClick();
+    handleFilterChange();
+}
 
 
 //exports below
 export default{
-    handleAddNewButton,
-    handleNewBookSubmit,
-    cancelButtonClick,
+    bindEventListeners,
     render,
 }

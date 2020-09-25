@@ -11,7 +11,11 @@ let filteredBookmarks = [];
 //create function that will find the current item by id
 const findById = function (id) {
     return this.bookmarkList.find(currentBookmark => {
-        currentBookmark.id ===id
+        if (currentBookmark.id ===id){
+            return true;
+        } else {
+            return false;
+        }
     });
 };
 
@@ -24,7 +28,11 @@ const addNewBookmark = function (newBookmark) {
 //find id of bookmark and deletes
 const deleteBookmark = function (id) {
     this.bookmarkList = this.bookmarkList.filter(currentBookmark => {
-        currentBookmark.id !== id
+        if(currentBookmark.id !== id){
+            return true;
+        } else {
+            return false;
+        };
     });
 };
 
@@ -36,19 +44,34 @@ const updateBookmark = function (id, newBookmark){
 
 //create function that will filter bookmarks according to chosen rating
 //if filter is >= rating chosen, push to the new array
-const filterBookmarks = function (rating){
+const filterBookmarks = function (filterNum){
     this.filter = true;
     this.bookmarkList.forEach(bookmark => {
-        if(bookmark.rating >= rating) {
-            this.filterBookmarks.push(bookmark);
+        if(bookmark.rating >= filterNum) {
+            this.filteredBookmarks.push(bookmark)
         } 
     })
 };
+/*
+const expandedBookmark = function (id) {
+    //find id to expand
+    let expandedBookmark = bookmarkList.find(bookmark => bookmark.id === id)
+    //toggle expand value
+    if (expandedBookmark.expand) {
+      expandedBookmark.expand = false;
+    } else {
+      expandedBookmark.expand = true
+    }
+  }
+  */
 
-//create filter to get the vaule from the rating filter
-const ratingfilter = function (value) {
-    this.ratingfilter = value;
-} 
+
+
+const expandedBookmark = function (id) {
+    this.expanded = !this.expand;
+}
+
+
 
 //create function that will set the error message
 
@@ -65,4 +88,5 @@ export default{
     deleteBookmark,
     updateBookmark,
     filterBookmarks,
+    expandedBookmark,
 }
