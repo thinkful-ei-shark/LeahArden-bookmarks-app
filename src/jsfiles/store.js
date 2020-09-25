@@ -52,8 +52,8 @@ const filterBookmarks = function (filterNum){
         } 
     })
 };
-/*
-const expandedBookmark = function (id) {
+
+const expandedBookmarkToggle = function (id) {
     //find id to expand
     let expandedBookmark = bookmarkList.find(bookmark => bookmark.id === id)
     //toggle expand value
@@ -63,15 +63,14 @@ const expandedBookmark = function (id) {
       expandedBookmark.expand = true
     }
   }
-  */
 
 
+/*
+const expandedBookmarkToggle = function (id) {
 
-const expandedBookmark = function (id) {
-    this.expanded = !this.expand;
+    this.expanded = !this.expanded;
 }
-
-
+*/
 
 //create function that will set the error message
 
@@ -88,5 +87,5 @@ export default{
     deleteBookmark,
     updateBookmark,
     filterBookmarks,
-    expandedBookmark,
+    expandedBookmarkToggle,
 }

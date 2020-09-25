@@ -29,7 +29,7 @@ const intialHtml = function (bookmarks, filterValue){
 
 //create a function that shows collapsed  view of list
 const collapsedHtml = function (bookmark) {
-    if (!bookmark.expanded) 
+    if (!bookmark.expand) 
     {return `<div class="js-bkm-element" data-item-id="${bookmark.id}">
                       <div>
                           <h3><a href=''>${bookmark.title} ${bookmark.rating} <button id='expand'>expand</button></a></h3>
@@ -218,7 +218,7 @@ const handleExpandClick = function (){
         event.preventDefault();
         const id = getBookmarkId(event.currentTarget);
         console.log(id);
-        store.expandedBookmark(id);
+        store.expandedBookmarkToggle(id);
         render();
     })
 }
@@ -230,7 +230,8 @@ const handleCollapseClick = function (){
         const id = getBookmarkId(event.currentTarget);
         //const bookmark = store.findById(id)
         console.log(id);
-        store.expanded = false;
+        store.expandedBookmarkToggle(id);
+        //bookmark.expand = false;
         render();
     })
 }
