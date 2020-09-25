@@ -1,4 +1,3 @@
-
 //imports up top
 //should import all/most files
 import $ from 'jquery';
@@ -25,8 +24,6 @@ api.getBookmarks()
     bookmarks.render();
     bookmarks.handleAddNewButton();
     bookmarks.handleNewBookSubmit();
-    bookmarks.handleExpandClicked();
-    bookmarks.handleCancelClick();
 
 }
 
