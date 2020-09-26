@@ -23,7 +23,6 @@ h2{
     font-family: 'Patrick Hand', cursive;
 }
 h3{
-    text-align: ;
     font-family: 'Patrick Hand', cursive;
     margin-right: 20px;
 }
@@ -76,6 +75,7 @@ p{
     border-color: gray;
 }
 
+
 .new-bkm{
     display: flex;
     flex-direction: column;
@@ -86,7 +86,7 @@ p{
 
 .bkm-input{
     font-family: 'Patrick Hand', cursive;
-    margin-top: 5px;
+    margin-top: 15px;
 }
 
 .save{
@@ -123,7 +123,6 @@ p{
 .bkm-collapsed, .bkm-expanded{
     display: flex;
     flex-direction: row;
-    width: 100%;
     justify-content: center;
     margin-top:33px;
     margin-bottom: 10px;
@@ -170,14 +169,13 @@ p{
     margin-top: 10px;
   }
 
-  .group-two {
+.group {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     margin: auto;
     align-content: center;
     margin-top: 10px;
   }  
-
   .item {
     flex: 1;
     margin: 25px;
@@ -214,9 +212,9 @@ p{
         margin-bottom: 10px;
         border: solid;
         background-color: rgb(190, 236, 238);
-        width: 100%;
-        margin-left: 300px;
-        margin-right: 300px;
+        width: 80%;
+        margin: auto;
+        
     }
 
     .desc-expanded{
@@ -225,8 +223,8 @@ p{
         border: solid;
         background-color: rgb(44, 191, 199);
         text-align: center;
-        margin-left: 300px;
-        margin-right: 300px;
+        width: 80%;
+        margin: auto;
         margin-top: -15px;
     }
 
@@ -259,7 +257,6 @@ p{
     }
 
     h3{
-        text-align: ;
         font-family: 'Patrick Hand', cursive;
         margin-right: 40px;
     }
