@@ -32,21 +32,7 @@ const generateError = function (message) {
       `;
   };
   
-  const renderError = function () {
-    if (store.error) {
-      const el = generateError(store.error);
-      $('.error-container').html(el);
-    } else {
-      $('.error-container').empty();
-    }
-  };
-  
-  const handleCloseError = function () {
-    $('main').on('click', '#cancel-error', () => {
-      store.setError(null);
-      renderError(); 
-    });
-  };
+
 
 
 const filterHtmlDropdownList = function (selectedRating){
@@ -76,7 +62,7 @@ const collapsedHtml = function (bookmark) {
               </div>`
 } else {
     return `<div class="group-two js-bkm-element" data-item-id="${bookmark.id}">
-                      <div class=" bkm-expanded">
+                      <div class="bkm-expanded">
                           <h3 class=" item item-double">${bookmark.title} ${bookmark.rating}</h3>
                           <button class="item collapse-btn" id='collapse'>collapse</button></a>
                         </div>                  
@@ -131,6 +117,10 @@ const addingBookmarkHtml = function () {
         return addingBookmark;
 };
 
+const getBookmarkId = function (bookmark){
+    return $(bookmark).closest('.js-bkm-element').data('item-id');
+}
+
 const bookmarksList = function (bookmarks, selectedRating){
     let allBookmarks = ``;
     for( let i = 0; i < bookmarks.length; i++ ){
@@ -140,7 +130,15 @@ const bookmarksList = function (bookmarks, selectedRating){
     }
     return allBookmarks;
 }
-
+//RENDER FUNCTIONS!!
+const renderError = function () {
+    if (store.error) {
+      const el = generateError(store.error);
+      $('.error-container').html(el);
+    } else {
+      $('.error-container').empty();
+    }
+  };
 
 //create render function that renders each page
 const render = function (){
@@ -160,6 +158,11 @@ const render = function (){
          //console.log(filteredBookmarks);
          
 }
+
+
+
+
+//EVENT HANDLERS!!!
 
 
 //create function that listens to add new bookmark click
@@ -220,9 +223,6 @@ const cancelButtonClick = function (){
     })
 }
 
-const getBookmarkId = function (bookmark){
-    return $(bookmark).closest('.js-bkm-element').data('item-id');
-}
 
 //create function for the delete button
 const deleteButtonClick = function (){
@@ -258,8 +258,8 @@ const handleExpandClick = function (){
         console.log('expand click ran');
         store.expandedBookmarkToggle(id);
         render();
-    })
-}
+    });
+};
 
 //create function that handles collapse click
 const handleCollapseClick = function (){
@@ -271,8 +271,8 @@ const handleCollapseClick = function (){
         store.expandedBookmarkToggle(id);
         //bookmark.expand = false;
         render();
-    })
-}
+    });
+};
 
 //create function to handle filtering bookmarks on change?
 const handleFilterChange = function (){
@@ -283,8 +283,15 @@ const handleFilterChange = function (){
         store.filteredBookmarksArray(selectedRating)
         store.filter = true;
         render();
-    })
-}
+    });
+};
+
+const handleCloseError = function () {
+    $('main').on('click', '#cancel-error', () => {
+      store.setError(null);
+      renderError(); 
+    });
+  };
 
 
 const bindEventListeners = function (){
