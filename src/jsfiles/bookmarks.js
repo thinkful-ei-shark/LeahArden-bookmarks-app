@@ -6,13 +6,13 @@ const intialHtml = function (bookmarks, selectedRating){
     let intialLoad = `
     <section class='filter-new-btns'>
     <div class='buttons'>
-        <form id='add-new'>
-            <button id='js-add-new' class="button">Add new Bookmark!</button>
+        <form id='add-new' class="heading">
+            <p><button id='js-add-new' class="button">Add new Bookmark!</button><p>
 
-            <label id="js-ratings">Filter</label>
-                <select class ='ratings' name="ratings" id="rate">
+            <p><label id="js-ratings">Filter</label>
+                <select class='ratings' name="ratings" id="rate">
                 ${filterHtmlDropdownList(selectedRating)}
-                </select>
+                </select><p>
         </form>
     </div>
 </section>
@@ -25,7 +25,7 @@ const generateError = function (message) {
     return `
         <section class="error-content">
         <div>
-          <button id="cancel-error">X</button>
+          <button class="cancel-error" id="cancel-error">X</button>
           <p>All entries are required! Don't forget to make sure your URL has https:// in front!</p>
           </div>
         </section>
@@ -44,7 +44,7 @@ const generateError = function (message) {
   const handleCloseError = function () {
     $('main').on('click', '#cancel-error', () => {
       store.setError(null);
-      renderError();
+      renderError(); 
     });
   };
 
@@ -53,9 +53,9 @@ const filterHtmlDropdownList = function (selectedRating){
     let options = ''
     for(let i = 1; i <= 5; i++){
         if(selectedRating === i){
-            options += `<option selected="selected" value="${i}">${i} star</option>`
+            options += `<option class="star-drop-down" selected="selected" value="${i}">${i}+ stars</option>`
         }else{
-            options += `<option value="${i}">${i} star</option>`
+            options += `<option class="star-drop-down" value="${i}">${i}+ stars</option>`
         }
     };
     return options;
@@ -68,20 +68,22 @@ const filterHtmlDropdownList = function (selectedRating){
 //create a function that shows collapsed  view of list
 const collapsedHtml = function (bookmark) {
     if (!bookmark.expand) 
-    {return `<div class="js-bkm-element" data-item-id="${bookmark.id}">
-                      <div>
-                          <h3> ${bookmark.title} ${bookmark.rating} <button id='expand'>expand</button></a></h3>
+    {return `<div class="group-two js-bkm-element" data-item-id="${bookmark.id}">
+                      <div class ="bkm-expanded">
+                          <h3 class=" item item-double"> ${bookmark.title} ${bookmark.rating} </h3>
+                          <button class="item expand-btn" id='expand'>expand</button></a>
                       </div>
               </div>`
 } else {
-    return `<div class="js-bkm-element" data-item-id="${bookmark.id}">
-                      <div>
-                          <h3>${bookmark.title} ${bookmark.rating}<button id='collapse'>collapse</button></a></h3>
-                                          
-                          <div>
-                          <p>${bookmark.url}</p>
+    return `<div class="group-two js-bkm-element" data-item-id="${bookmark.id}">
+                      <div class=" bkm-expanded">
+                          <h3 class=" item item-double">${bookmark.title} ${bookmark.rating}</h3>
+                          <button class="item collapse-btn" id='collapse'>collapse</button></a>
+                        </div>                  
+                          <div class="desc-expanded">
+                          <p><a href="${bookmark.url}">Visit Site!</a></p>
                            <p>${bookmark.desc}</p>  
-                          <button id='js-delete'>Delete</button>
+                          <button class="delete" id='js-delete'>Delete</button>
                           </div>
                           
                       </div>
@@ -95,57 +97,39 @@ const addingBookmarkHtml = function () {
     let addingBookmark = `
     <div class="error-container"></div>
     <form id='js-new-bkm'>
-            <div class='new-bkm'>
-                <label aria-label='new-bkm-rating' for='new-bkm-rating'>Add a Rating Between 1-5</label>
+        <div class="new-bkm group">
+            <div class="bkm-input item">
+                <label aria-label='new-bkm-rating' for='new-bkm-rating'>A Rating Between 1-5: </label>
                 <input type="number" class="rating" size="3" min="1" max="5" name="url" placeholder="3" id="new-bkm-rating" required>
 
             </div>
 
-            <div class='new-bkm'> 
-                <label id="new-bookmark-title">Bookmark Name:</label>
-                <input type="text" name="title" placeholder="New bookmark" id="new-bkm-title">
+            <div class="bkm-input item"> 
+                <label id="new-bookmark-title">Name:</label>
+                <input type="text" name="title" placeholder="Amazon" id="new-bkm-title">
             </div> 
 
-            <div class='new-bkm'>
+            <div class="bkm-input item">
                 <label id="new-url">Add URL:</label>
-                <input type="text" name="url" placeholder="url" id="new-bkm-url" required>
+                <input type="text" name="url" placeholder="https://www.amazon.com/" id="new-bkm-url" required>
             </div>
 
-            <div class='new-bkm'>
+            <div class="bkm-input item">
                 <label id="descripton">Description:</label>
-                <input type="text" name="desc" placeholder="Description" id="new-bkm-desc" required>
+                <input  type="text" name="desc" placeholder="I shop here all the time!" id="new-bkm-desc" required>
             </div>
-            <div class='save-delete'>
-                <button type='submit' id='bkm-save'>Save</button>
+        <div>    
+            <div class="save">
+                <button class="save-btn" type='submit' id='bkm-save'>Save</button>
             </div>
             </form>
     <form>
-            <div>    
-                <button id='js-cancel'>Cancel</button>
+            <div class="cancel">    
+                <button class="cancel-btn" id='js-cancel'>Cancel</button>
             </div>
         </form>`
         return addingBookmark;
 };
-
-//create a function that will generate html for editing bookmark page
-/*
-const editingBookmarkHtml = function (bookmark, rating) {
-    let editingBookmark = `
-    <div class="expanded-bkm" data-item-id="${bookmark.id}">
-     <section class="bookmark-top-row">
-     <a class="expanded-title" href="${bookmark.url}" target="_blank"> <strong> ${bookmark.title} </strong> </a> 
-     <a class="expanded-rating" href="${bookmark.url}" target="_blank"> ${rating} </a> 
-     <button class="collapse-btn"></i> Collapse </button>
-   </section>
-     <section class="bookmark-bottom-row"> 
-       <p id="description">Notes: ${bookmark.desc} </p>
-       <button class="delete-btn"> Delete </button>
-     </section>
-   </div>`
-   return editingBookmark;
-};
-*/
-
 
 const bookmarksList = function (bookmarks, selectedRating){
     let allBookmarks = ``;
@@ -293,6 +277,7 @@ const handleCollapseClick = function (){
 //create function to handle filtering bookmarks on change?
 const handleFilterChange = function (){
     $('main').on('change','#rate', event => {
+        event.preventDefault(); 
         const selectedRating = parseInt($('#rate').val());
         console.log('rating', selectedRating);
         store.filteredBookmarksArray(selectedRating)
