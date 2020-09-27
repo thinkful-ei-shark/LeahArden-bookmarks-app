@@ -52,8 +52,11 @@ const filteredBookmarksArray = function (filterNum){
 
 const expandedBookmarkToggle = function (id) {
     //find id to expand
-    let expandedBookmark = bookmarkList.find(bookmark => bookmark.id === id)
+    let expandedBookmark = this.bookmarkList.find(bookmark => bookmark.id === id)
     //toggle expand value
+    //console.log('id:', expandedBookmark.id);
+    console.log(bookmarkList);
+    console.log(id);
     if (expandedBookmark.expand) {
       expandedBookmark.expand = false;
     } else {

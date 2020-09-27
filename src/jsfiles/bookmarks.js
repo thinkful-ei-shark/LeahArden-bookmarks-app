@@ -52,14 +52,14 @@ const filterHtmlDropdownList = function (selectedRating){
 //create a function that shows collapsed  view of list
 const collapsedHtml = function (bookmark) {
     if (!bookmark.expand) 
-    {return `<div class="group-two js-bkm-element" data-item-id="${bookmark.id}">
+    {return `<div class="js-bkm-element" data-item-id="${bookmark.id}">
                    <div class ="bkm-expanded">
                         <h3 class=" item item-double"> ${bookmark.title} ${bookmark.rating} </h3>
                         <button class="item expand-btn" id="expand">expand</button></a>
                     </div>
               </div>`
 } else {
-    return `<div class="group-two js-bkm-element" data-item-id="${bookmark.id}">
+    return `<div class=" js-bkm-element" data-item-id="${bookmark.id}">
                 <div class="bkm-expanded">
                     <h3 class=" item item-double">${bookmark.title} ${bookmark.rating}</h3>
                      <button class="item collapse-btn" id="collapse">collapse</button></a>
@@ -201,6 +201,7 @@ const handleNewBookSubmit = function (bookmark){
 
         api.createBookmark(newBookmark)
         .then((newBookmark) =>{
+            console.log(newBookmark);
             store.addNewBookmark(newBookmark);
             store.adding = false;
             render(); 
@@ -254,6 +255,7 @@ const handleExpandClick = function (){
     $('main').on('click','#expand', event => {
         event.preventDefault();
         const id = getBookmarkId(event.currentTarget);
+        console.log(id);
         console.log('expand click ran');
         store.expandedBookmarkToggle(id);
         render();
