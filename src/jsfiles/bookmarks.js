@@ -37,9 +37,9 @@ const filterHtmlDropdownList = function (selectedRating){
     let options = ''
     for(let i = 1; i <= 5; i++){
         if(selectedRating === i){
-            options += `<option class="star-drop-down" selected="selected" value="${i}">${i}+ stars</option>`
+            options += `<option id='rate' class="star-drop-down" selected="selected" value="${i}">${i}+ stars</option>`
         }else{
-            options += `<option class="star-drop-down" value="${i}">${i}+ stars</option>`
+            options += `<option id='rate' class="star-drop-down" value="${i}">${i}+ stars</option>`
         }
     };
     return options;
