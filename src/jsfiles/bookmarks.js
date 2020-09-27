@@ -9,7 +9,7 @@ const intialHtml = function (bookmarks, selectedRating){
             <form id="add-new" class="heading">
                 <p><button id="js-add-new" class="button">Add new Bookmark!</button><p>
 
-                <p><label id="js-ratings">Filter</label>
+                <p><label for="rate" id="js-ratings">Filter</label>
                     <select class="ratings" name="ratings" id="rate">
                     ${filterHtmlDropdownList(selectedRating)}
                     </select><p>
