@@ -1,6 +1,11 @@
 
 https://thinkful-ei-shark.github.io/LeahArden-bookmarks-app/
 
+Welcome to the Bookmarks Keeper!
+
+This app will keep all your favorite(or least favorite) bookmarks in one place. 
+With this app you can give them nicknames AND rate them from 1-5!
+
 
 User can do the following:
 
